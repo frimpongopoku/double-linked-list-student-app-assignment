@@ -16,96 +16,92 @@ public class App {
 
     public static void main(String[] args) throws Exception {
 
-        //--- Testing IDisplayable class
-//        TestingIDisplayable displayer = new TestingIDisplayable();
-//        displayer.display();
-        //-- Testing Student class
-//        Student student = new Student("Mobi Dick","full-time");
-//        student.display();
-        //--- Testing StudentList display
-//        StudentList list = new StudentList(); // Dont comment this part out, all the parts below for testing depend on this
-//        list.createDummyList(); // Dont comment this part out, all the parts below for testing depend on this
-//        list.display(); // Test list display
-//
-        //---- Testing StudentList insertion
-//        Student newStudent = new Student("Sunday Guy","part-time",23);
-//        list.insert(new Node(newStudent),1);
-//        list.display(); Testing what list looks like after insertion
-        //---- Testing StudentList item deletion with position
-//        list.delete(0); // "Monday Guy" should be removed after here
-//        list.display();
-        // --- Testing StudentList find with studentId
-//            Student found = list.findById(2);
-//            if(found != null) found.display(); // "Tuesday Guy" should be printed here
-//            else System.out.println("Sorry, could not find any user with that Id");
-        // --- Testing StudentList find with studentName
-//        Student found = list.findByName("Wednesday Guy");
-//        if(found != null) found.display(); // "Wednesday Guy" should be printed here
-//        else System.out.println("Sorry, could not find any user with that Name");
-        // --- Testing StudentList saving to file
-//        list.saveToFile("first-file.txt");
-//        ------------------ Remove parts for testing code after you have copied the content of the console into a document like the assignment says -----
-        //-------------- APP BEGINNING HERE --------------
         App app = new App();
         System.out.println("WELCOME TO THE ALU STUDENTS ADMIN DATABASE APP");
-        app.launchMenu();
+        app.showMainMenu();
 
     }
 
-    public void launchMenu() {
+    public void showMainMenu() {
+
         System.out.format("\033[31m%s\033[0m%n", "========================= MAIN MENU =====================");
         System.out.format("\033[31m%s\033[0m%n", "A. ADD A STUDENT");
         System.out.format("\033[31m%s\033[0m%n", "R. REMOVE A STUDENT");
         System.out.format("\033[31m%s\033[0m%n", "S. SEARCH FOR STUDENT");
-        System.out.format("\033[31m%s\033[0m%n", String.format("D. SHOW ALL (%s) STUDENT RECORDS",list.length));
+        System.out.format("\033[31m%s\033[0m%n", String.format("D. SHOW ALL (%s) STUDENT RECORDS", list.length));
         System.out.format("\033[31m%s\033[0m%n", "L. LOAD STUDENT RECORDS FROM FILE");
         System.out.format("\033[31m%s\033[0m%n", "Q. QUIT");
+        System.out.format("\033[31m%s\033[0m%n", "");
+        System.out.format("\033[31m%s\033[0m%n", "[Type 'back' or 'menu' at any point in time to go to main menu]");
         System.out.format("\033[31m%s\033[0m%n", "=========================================================");
-        char character = InputReader.readCharacter("Enter menu option", "ARSDLQ");
+
+        char character = InputReader.readCharacter("What would you like to do", "ARSDLQ");
         switch (Character.toUpperCase(character)) {
-            case 'A': {
+            case 'A' -> {
+                System.out.format("\033[31m%s\033[0m%n", "================= ADD STUDENT ==============");
                 addStudent();
-                break;
             }
-            case 'R': {
+            case 'R' -> {
+                System.out.format("\033[31m%s\033[0m%n", "================= REMOVE STUDENT ==============");
                 removeStudentFromRecords();
-                break;
             }
-            case 'S': {
+            case 'S' -> {
                 System.out.println("You can search by ID / Student Name");
-                System.out.format("\033[31m%s\033[0m%n", "==================== SEARCH FOR STUDENT ====================");
+                System.out.format("\033[31m%s\033[0m%n", "============== SEARCH FOR STUDENT ==============");
                 searchForStudent();
-                break;
             }
-            case 'D': {
-                System.out.format("\033[31m%s\033[0m%n", "================= Displaying all student records ==============");
+            case 'D' -> {
+                System.out.format("\033[31m%s\033[0m%n", "========= DISPLAYING ALL STUDENT RECORDS =======");
                 showStudentRecords();
-                break;
             }
-            case 'L': {
+            case 'L' -> {
+                System.out.format("\033[31m%s\033[0m%n", "============== LOADING FROM FILE ==============");
                 loadRecordsFromFile();
-                break;
             }
 
-            case 'Q': {
+            case 'Q' -> {
                 quit();
-                break;
             }
         }
 
     }
 
+    public Boolean userWantsToGoBack(String input) {
+        if (input.toLowerCase().equals("back") || input.toLowerCase().equals("b")) {
+            System.out.println("Going back...");
+            return true;
+        }
+
+        return false;
+    }
+
     public void addStudent() {
         String name = InputReader.readString("Name of new student");
-        String cat = InputReader.readString("Student enrollment type(full-time/part-time)");
+        if (userWantsToGoBack(name)) {
+            showMainMenu();
+            return;
+        }
+        System.out.println("Student Enrollment Type");
+        System.out.println("---------------------------");
+        Character c = Character.toLowerCase(InputReader.readCharacter("F. FULL TIME P. PART TIME", "FP"));
+        String cat = "";
+        if (c.equals('f')) {
+            cat = Student.FULL_TIME;
+        }
+        if (c.equals('p')) {
+            cat = Student.PART_TIME;
+        }
         Student student = new Student(name, cat, list.length + 1);
         list.add(new Node(student));
-        launchMenu();
+        showMainMenu();
     }
 
     public void searchForStudent() {
-
         String input = InputReader.readString("Enter the name, or ID of student");
+        if (userWantsToGoBack(input)) {
+            showMainMenu();
+            return;
+        }
         int id;
         Student found = null;
         if (input.isEmpty()) {
@@ -115,7 +111,7 @@ public class App {
         }
 
         try {
-            if (input.length() == 1) {
+            if (input.length() == 1) { // If user typed one character, it means its probably a number, so search by ID
                 id = Integer.parseInt(input);
                 found = list.findById(id);
             } else {
@@ -133,17 +129,21 @@ public class App {
             found.display();
         }
 
-        launchMenu();
+        showMainMenu();
 
     }
 
     public void showStudentRecords() {
         list.display();
-        launchMenu();
+        showMainMenu();
     }
 
     public void loadRecordsFromFile() {
         String filename = InputReader.readString("Filename");
+        if (userWantsToGoBack(filename)) {
+            showMainMenu();
+            return;
+        }
         if (filename.isEmpty()) {
             System.out.println("You did not provide any filename...");
         } else {
@@ -151,19 +151,36 @@ public class App {
             this.list = loadedList;
             loadedList.display();
         }
-        launchMenu();
+        showMainMenu();
     }
 
     public void removeStudentFromRecords() {
-        int id = InputReader.readInt("Whats the ID of the student you would like to remove?");
-        int position = list.getPositionOfStudent(id);
-        list.delete(position);
-        launchMenu();
+        if (list.length == 0) {
+            System.out.println("There are no records available yet to remove...");
+            showMainMenu();
+            return;
+        }
+        String id = InputReader.readString("Whats the ID of the student you would like to remove?");
+        if (userWantsToGoBack(id)) {
+            showMainMenu();
+            return;
+        }
+        int pos = list.getIndexOf(Integer.parseInt(id));
+        if (pos != -1) {
+            list.delete(pos);
+        } else {
+            System.out.println(String.format("Sorry, no student exists with ID '%s'...", id));
+        }
+        showMainMenu();
     }
 
     public void quit() {
         if (list.length > 0) {
             String filename = InputReader.readString("Give your file a name");
+            if (userWantsToGoBack(filename)) {
+                showMainMenu();
+                return;
+            }
             if (filename.isEmpty()) {
                 filename = "new-file.txt";
             }
