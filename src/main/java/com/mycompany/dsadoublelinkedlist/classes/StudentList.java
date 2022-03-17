@@ -4,6 +4,7 @@ package com.mycompany.dsadoublelinkedlist.classes;
  *
  * @author Frimpong Opoku Agyemang
  */
+import Helpers.Utils;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -16,6 +17,11 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+/**
+ * A class that represents the node
+ *
+ * @author Frimpong Opoku Agyemang
+ */
 public class StudentList implements IDisplayable {
 
     private final Node head, tail;
@@ -26,10 +32,18 @@ public class StudentList implements IDisplayable {
         this.tail = new Node();
     }
 
+    /**
+     * Takes in the id of a Student ID And traverses the node chain to find the
+     * position of any student whose ID matches Then returns the Student Object
+     * on the node
+     *
+     * @param id
+     * @return
+     */
     public Student findById(int id) {
         int count = 0;
         Node node = head.next;
-        while (count < length - 1) {
+        while (count < length) {
             if (node.data != null && id == node.data.getId()) {
                 return node.data;
             }
@@ -39,10 +53,15 @@ public class StudentList implements IDisplayable {
         return null;
     }
 
+    /**
+     *
+     * @param name
+     * @return
+     */
     public Student findByName(String name) {
         int count = 0;
         Node node = head.next;
-        while (count < length - 1) {
+        while (count < length) {
             if (node.data != null && name.toLowerCase().equals(node.data.getName().toLowerCase())) {
                 return node.data;
             }
@@ -53,10 +72,18 @@ public class StudentList implements IDisplayable {
         return null;
     }
 
-    public int getPositionOfStudent(int id) {
+    /**
+     * Takes in the id of a Student ID And traverses the node chain to find the
+     * position of any student whose ID matches Then returns the position of the
+     * matching student on the node chain
+     *
+     * @param id
+     * @return
+     */
+    public int getIndexOf(int id) {
         int count = 0;
         Node node = head.next;
-        while (count < length - 1) {
+        while (count < length) {
             if (node.data != null && id == node.data.getId()) {
                 return count;
             }
@@ -67,6 +94,13 @@ public class StudentList implements IDisplayable {
         return -1;
     }
 
+    /**
+     * Takes in a new node, and a position as parameters And reconstructs the
+     * node chain with the just-passed node at the specified position
+     *
+     * @param n
+     * @param position
+     */
     public void insert(Node n, int position) {
         if (length <= 0) {
             head.next = n;
@@ -88,6 +122,11 @@ public class StudentList implements IDisplayable {
         length++;
     }
 
+    /**
+     * Takes a new node, And appends it to the end of node chain
+     *
+     * @param n
+     */
     public void add(Node n) {
         if (length == 0) {
             head.next = n;
@@ -104,6 +143,12 @@ public class StudentList implements IDisplayable {
         length++;
     }
 
+    /**
+     * Takes in a position as parameter, And removes the node that exists at the
+     * specified position
+     *
+     * @param position
+     */
     public void delete(int position) {
 
         if (length == 1) {
@@ -130,6 +175,12 @@ public class StudentList implements IDisplayable {
 
     }
 
+    /**
+     * Takes in a filename And uses it as a label to store the "stringified"
+     * content of of the StudentList object
+     *
+     * @param filename
+     */
     public void saveToFile(String filename) {
         try (PrintWriter output = new PrintWriter(filename)) {
             output.print(this.toString());
@@ -139,10 +190,16 @@ public class StudentList implements IDisplayable {
         }
     }
 
+    /**
+     * Takes in a file name, reads the content of the file And uses its content
+     * to reconstruct a new studentList object
+     *
+     * @param filename
+     * @return
+     */
     public StudentList loadFromFile(String filename) {
         StudentList newList = new StudentList();
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
-            SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
             String[] temp;
             String line = br.readLine();
             while (line != null) {
@@ -153,7 +210,7 @@ public class StudentList implements IDisplayable {
                 name = temp[1];
                 mark = Integer.parseInt(temp[2]);
                 category = temp[3];
-                Date date = formatter.parse(temp[4]);
+                Date date = Utils.formatter.parse(temp[4]);
                 subs = Integer.parseInt(temp[5]);
                 Student newStudent = new Student(name, category, id);
                 newStudent.setMarks(mark);
@@ -165,7 +222,8 @@ public class StudentList implements IDisplayable {
 
             br.close();
         } catch (IOException | ParseException ex) {
-            Logger.getLogger(StudentList.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Sorry, the content of your file cannot be loaded into the app...");
+
         }
         return newList;
     }
@@ -174,12 +232,17 @@ public class StudentList implements IDisplayable {
     public void display() {
         Node node = head.next;
         int count = 0;
-        while (count <= length) {
-            if (node.previous != null && node.next != null) {
-                node.data.display();
+        try {
+
+            while (count <= length) {
+                if (node.previous != null && node.next != null) {
+                    node.data.display();
+                }
+                node = node.next;
+                count++;
             }
-            node = node.next;
-            count++;
+        } catch (Exception e) {
+            System.out.println("Sorry, some records were not valid to be processed...");
         }
     }
 
