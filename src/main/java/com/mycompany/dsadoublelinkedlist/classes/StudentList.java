@@ -1,9 +1,5 @@
 package com.mycompany.dsadoublelinkedlist.classes;
 
-/**
- *
- * @author Frimpong Opoku Agyemang
- */
 import Helpers.Utils;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -11,8 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -205,23 +199,27 @@ public class StudentList implements IDisplayable {
             while (line != null) {
                 temp = line.split(",");
                 String name, category;
-                int mark, id, subs;
+                int id, subs;
+                float average;
+                String[] marks;
                 id = Integer.parseInt(temp[0]);
                 name = temp[1];
-                mark = Integer.parseInt(temp[2]);
+                average = Float.valueOf(temp[2]);
                 category = temp[3];
                 Date date = Utils.formatter.parse(temp[4]);
                 subs = Integer.parseInt(temp[5]);
-                Student newStudent = new Student(name, category, id);
-                newStudent.setMarks(mark);
+                marks = temp[6].trim().split(Utils.DELIMITER)[1].split("-");
+                //Create new student object with deconstructed string, and just processed values
+                Student newStudent = new Student(name, category, id, Utils.toArrayList(marks), average);
                 newStudent.setDateOfEnrollment(date);
                 newStudent.setNumberOfSubjects(subs);
+
                 newList.add(new Node(newStudent));
                 line = br.readLine();
             }
 
             br.close();
-        } catch (IOException | ParseException ex) {
+        } catch (IOException | ParseException | NumberFormatException ex) {
             System.out.println("Sorry, the content of your file cannot be loaded into the app...");
 
         }
@@ -231,6 +229,10 @@ public class StudentList implements IDisplayable {
     @Override
     public void display() {
         Node node = head.next;
+        if (length == 0) {
+            System.out.println("There are no records of students yet...");
+            return;
+        }
         int count = 0;
         try {
 
@@ -246,9 +248,13 @@ public class StudentList implements IDisplayable {
         }
     }
 
+    @Override
     public String toString() {
         String string = "";
         Node node = head.next;
+        if (length == 0) {
+            return string;
+        }
         int count = 0;
         while (count <= length) {
             if (node.previous != null && node.next != null) {
