@@ -1,4 +1,3 @@
-
 package com.mycompany.dsadoublelinkedlist.classes;
 
 import java.util.Scanner;
@@ -8,8 +7,8 @@ import java.util.Scanner;
  * @author Frimpong Opoku Agyemang
  */
 public class UserInputHandler {
-    
-     private final Scanner reader;
+
+    private final Scanner reader;
 
     /**
      *
@@ -19,7 +18,6 @@ public class UserInputHandler {
     }
 
     // Read Character
-
     /**
      *
      * @param prompt
@@ -33,7 +31,6 @@ public class UserInputHandler {
     }
 
     // Read Character - set of valid values
-
     /**
      *
      * @param prompt
@@ -41,22 +38,27 @@ public class UserInputHandler {
      * @return
      */
     public char readCharacter(String prompt, String validCharacters) {
-        char inputText;
+        char inputText = 0;
         boolean inputError;
-        do {
-            inputError = false;
-            System.out.println(prompt + ": ");
-            inputText = reader.nextLine().toUpperCase().charAt(0);
-            if (validCharacters.indexOf(inputText) == -1) {
-                inputError = true;
-                System.out.println("Character out of range: please re-enter: ");
-            }
-        } while (inputError);
+        try {
+
+            do {
+                inputError = false;
+                System.out.println(prompt + ": ");
+                inputText = reader.nextLine().toUpperCase().charAt(0);
+                if (validCharacters.indexOf(inputText) == -1) {
+                    inputError = true;
+                    System.out.println("Character out of range: please re-enter: ");
+                }
+            } while (inputError);
+        } catch (Exception e) {
+            System.out.println("You might have put in an invalid input, please try again...");
+            return readCharacter(prompt, validCharacters);
+        }
         return inputText;
     }
 
     // Read String
-
     /**
      *
      * @param prompt
@@ -70,7 +72,6 @@ public class UserInputHandler {
     }
 
     // Read Int
-
     /**
      *
      * @param prompt
@@ -100,7 +101,6 @@ public class UserInputHandler {
     }
 
     // Read Int
-
     /**
      *
      * @param prompt
@@ -123,5 +123,4 @@ public class UserInputHandler {
         return inputNumber;
     }
 
-   
 }

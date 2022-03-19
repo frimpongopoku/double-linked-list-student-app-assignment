@@ -16,6 +16,11 @@ public class App {
     final UserInputHandler InputReader = new UserInputHandler();
     StudentList list = new StudentList();
 
+    /**
+     *
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
 
         App app = new App();
@@ -24,6 +29,9 @@ public class App {
 
     }
 
+    /**
+     *
+     */
     public void showMainMenu() {
 
         System.out.format("\033[31m%s\033[0m%n", "========================= MAIN MENU =====================");
@@ -68,6 +76,11 @@ public class App {
 
     }
 
+    /**
+     *
+     * @param input
+     * @return
+     */
     public Boolean userWantsToGoBack(String input) {
         if (input.toLowerCase().equals("back") || input.toLowerCase().equals("b")) {
             System.out.println("Going back...");
@@ -77,9 +90,9 @@ public class App {
         return false;
     }
 
-    
-    
-
+    /**
+     *
+     */
     public void addStudent() {
         String name = InputReader.readString("Name of new student");
         if (userWantsToGoBack(name)) {
@@ -106,11 +119,14 @@ public class App {
         int numberOfObjects = InputReader.readInt("How many subjects does this student take?");
 
         Student student = new Student(name, cat, list.length + 1, numberOfObjects);
-        
+
         list.add(new Node(student));
         showMainMenu();
     }
 
+    /**
+     *
+     */
     public void searchForStudent() {
         String input = InputReader.readString("Enter the name, or ID of student");
         if (userWantsToGoBack(input)) {
@@ -148,11 +164,17 @@ public class App {
 
     }
 
+    /**
+     *
+     */
     public void showStudentRecords() {
         list.display();
         showMainMenu();
     }
 
+    /**
+     *
+     */
     public void loadRecordsFromFile() {
         String filename = InputReader.readString("Filename");
         if (userWantsToGoBack(filename)) {
@@ -168,6 +190,9 @@ public class App {
         showMainMenu();
     }
 
+    /**
+     *
+     */
     public void removeStudentFromRecords() {
         if (list.length == 0) {
             System.out.println("There are no records available yet to remove...");
@@ -188,6 +213,9 @@ public class App {
         showMainMenu();
     }
 
+    /**
+     *
+     */
     public void quit() {
         if (list.length > 0) {
             String filename = InputReader.readString("Give your file a name");
@@ -198,14 +226,14 @@ public class App {
             if (filename.isEmpty()) {
                 filename = "new-file.txt";
             }
-            String[] pieces  =filename.split(".");
-            boolean doesNotHaveTXTExtension = pieces[pieces.length -1].equals("txt");
-            if(doesNotHaveTXTExtension){ 
-                filename = pieces[0] +".txt";
+            String[] pieces = filename.split("\\.");
+            boolean doesNotHaveTXTExtension = !pieces[pieces.length - 1].equals("txt");
+            if (doesNotHaveTXTExtension) {
+                filename = pieces[0] + ".txt";
             }
             list.saveToFile(filename);
             System.out.println(String.format("The students records have been saved under the name '%s'. Thanks for using this app, goodbye!", filename));
-        }else { 
+        } else {
             System.out.println("Your list is currently empty, you do not have anything to save yet.");
         }
     }

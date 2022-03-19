@@ -9,7 +9,11 @@ import tests.IDisplayable.IDisplayableImplementation;
  */
 public class IDisplayableTestClass {
     
-   public static void main (String[] args) { 
+    /**
+     *
+     * @param args
+     */
+    public static void main (String[] args) { 
        System.out.println("---- Testing IDidisplayable Class ------");
        IDisplayableImplementation iDisplay = new IDisplayableImplementation();
        iDisplay.display();

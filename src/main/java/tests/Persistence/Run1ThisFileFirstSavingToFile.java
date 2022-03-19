@@ -9,7 +9,12 @@ import tests.StudentList.StudentFactory;
  * @author Frimpong Opoku Agyemang
  */
 public class Run1ThisFileFirstSavingToFile {
-        public static void main ( String[] args) { 
+ 
+    /**
+     *
+     * @param args
+     */
+    public static void main ( String[] args) { 
          StudentList list = StudentFactory.makeStudents(10);
         list.saveToFile("Test-save-file.txt");
         list.display();

@@ -7,5 +7,5 @@ package com.mycompany.dsadoublelinkedlist.classes;
  */
 public interface IDisplayable {
 
-    public void display();
+    public abstract void display();
 }

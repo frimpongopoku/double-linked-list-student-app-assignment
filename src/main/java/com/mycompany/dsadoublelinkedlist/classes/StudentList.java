@@ -19,8 +19,15 @@ import java.util.logging.Logger;
 public class StudentList implements IDisplayable {
 
     private final Node head, tail;
+
+    /**
+     *
+     */
     public int length = 0;
 
+    /**
+     *
+     */
     public StudentList() {
         this.head = new Node();
         this.tail = new Node();
@@ -164,6 +171,8 @@ public class StudentList implements IDisplayable {
         }
         Node previous = node.previous;
         Node next = node.next;
+        previous.next = next;
+        next.previous = previous;
 
         length--;
 
@@ -189,10 +198,8 @@ public class StudentList implements IDisplayable {
      * to reconstruct a new studentList object
      *
      * @param filename
-     * @return
      */
-    public StudentList loadFromFile(String filename) {
-        StudentList newList = new StudentList();
+    public  void loadFromFile(String filename) {
         try (BufferedReader br = new BufferedReader(new FileReader(filename))) {
             String[] temp;
             String line = br.readLine();
@@ -206,7 +213,7 @@ public class StudentList implements IDisplayable {
                 name = temp[1];
                 average = Float.valueOf(temp[2]);
                 category = temp[3];
-                Date date = Utils.formatter.parse(temp[4]);
+                Date date = Utils.formatter.parse(temp[4]); 
                 subs = Integer.parseInt(temp[5]);
                 marks = temp[6].trim().split(Utils.DELIMITER)[1].split("-");
                 //Create new student object with deconstructed string, and just processed values
@@ -214,18 +221,21 @@ public class StudentList implements IDisplayable {
                 newStudent.setDateOfEnrollment(date);
                 newStudent.setNumberOfSubjects(subs);
 
-                newList.add(new Node(newStudent));
+                this.add(new Node(newStudent));
                 line = br.readLine();
             }
 
             br.close();
-        } catch (IOException | ParseException | NumberFormatException ex) {
+        } catch (IOException | ParseException | NumberFormatException  ex) {
             System.out.println("Sorry, the content of your file cannot be loaded into the app...");
 
         }
-        return newList;
+       
     }
 
+    /**
+     * Displays the content of all nodes on the double linked list chain
+     */
     @Override
     public void display() {
         Node node = head.next;

@@ -12,6 +12,10 @@ import com.mycompany.dsadoublelinkedlist.classes.StudentList;
  */
 public class TestStudentListClass {
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         //------ Test adding, and displaying student records to student list
         StudentList list = StudentFactory.makeStudents(5);

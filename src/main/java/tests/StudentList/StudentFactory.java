@@ -11,6 +11,12 @@ import com.mycompany.dsadoublelinkedlist.classes.StudentList;
  * @author Frimpong Opoku Agyemang
  */
 public class StudentFactory {
+
+    /**
+     *
+     * @param numberOfStudents
+     * @return
+     */
     public static StudentList makeStudents(int numberOfStudents){ 
         StudentList list = new StudentList();
         String[] categories = {Student.PART_TIME, Student.FULL_TIME};

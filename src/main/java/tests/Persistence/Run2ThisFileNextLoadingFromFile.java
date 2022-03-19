@@ -8,6 +8,10 @@ import com.mycompany.dsadoublelinkedlist.classes.StudentList;
  */
 public class Run2ThisFileNextLoadingFromFile {
 
+    /**
+     *
+     * @param args
+     */
     public static void main(String[] args) {
         StudentList list = new StudentList();
         list.loadFromFile("Test-save-file.txt");

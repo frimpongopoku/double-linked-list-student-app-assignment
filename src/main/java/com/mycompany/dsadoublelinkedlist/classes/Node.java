@@ -9,9 +9,17 @@ public class Node {
     Student data;
     Node next, previous;
 
+    /**
+     *
+     */
     public Node(){}
-    public Node(Student d) {
-        this.data = d;
+
+    /**
+     * Initialises a node with Student Object
+     * @param s
+     */
+    public Node(Student s) {
+        this.data = s;
     }
 }
 
