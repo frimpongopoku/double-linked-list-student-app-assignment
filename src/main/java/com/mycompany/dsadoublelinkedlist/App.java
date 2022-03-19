@@ -1,9 +1,11 @@
 package com.mycompany.dsadoublelinkedlist;
 
+import Helpers.Utils;
 import com.mycompany.dsadoublelinkedlist.classes.Node;
 import com.mycompany.dsadoublelinkedlist.classes.Student;
 import com.mycompany.dsadoublelinkedlist.classes.StudentList;
 import com.mycompany.dsadoublelinkedlist.classes.UserInputHandler;
+import java.util.ArrayList;
 
 /**
  *
@@ -75,12 +77,22 @@ public class App {
         return false;
     }
 
+    
+    
+
     public void addStudent() {
         String name = InputReader.readString("Name of new student");
         if (userWantsToGoBack(name)) {
             showMainMenu();
             return;
         }
+
+        if (name.isEmpty()) {
+            System.out.println("You did not type any student name, please retry....");
+            addStudent();
+            return;
+        }
+
         System.out.println("Student Enrollment Type");
         System.out.println("---------------------------");
         Character c = Character.toLowerCase(InputReader.readCharacter("F. FULL TIME P. PART TIME", "FP"));
@@ -91,7 +103,10 @@ public class App {
         if (c.equals('p')) {
             cat = Student.PART_TIME;
         }
-        Student student = new Student(name, cat, list.length + 1);
+        int numberOfObjects = InputReader.readInt("How many subjects does this student take?");
+
+        Student student = new Student(name, cat, list.length + 1, numberOfObjects);
+        
         list.add(new Node(student));
         showMainMenu();
     }
@@ -147,9 +162,8 @@ public class App {
         if (filename.isEmpty()) {
             System.out.println("You did not provide any filename...");
         } else {
-            StudentList loadedList = list.loadFromFile(filename.trim());
-            this.list = loadedList;
-            loadedList.display();
+            list.loadFromFile(filename.trim());
+            list.display();
         }
         showMainMenu();
     }
@@ -184,8 +198,15 @@ public class App {
             if (filename.isEmpty()) {
                 filename = "new-file.txt";
             }
+            String[] pieces  =filename.split(".");
+            boolean doesNotHaveTXTExtension = pieces[pieces.length -1].equals("txt");
+            if(doesNotHaveTXTExtension){ 
+                filename = pieces[0] +".txt";
+            }
             list.saveToFile(filename);
             System.out.println(String.format("The students records have been saved under the name '%s'. Thanks for using this app, goodbye!", filename));
+        }else { 
+            System.out.println("Your list is currently empty, you do not have anything to save yet.");
         }
     }
 
